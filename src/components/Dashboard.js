@@ -51,7 +51,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-            <div className="dashboard">
+            <div className="dashboard-h1">
                 <h1>Student Dashboard</h1>
                 <div className="time-slots">
                     {availableTimeSlots.map((slot) => (
