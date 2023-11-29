@@ -1,0 +1,95 @@
+
+.dashboard-h1 {
+  max-width: 600px;
+  margin: auto;
+  margin-top: 40px;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  background-color: lavender;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
+  color: #333;
+
+}
+
+.time-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.time-slot {
+  border: 2px solid #ccc;
+  padding: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 8px;
+  width: calc(40% - 10px);
+  margin-bottom: 10px;
+  background-color: #fff;
+  text-align: center;
+  justify-content: center;
+}
+
+.time-slot:hover {
+  background-color: #e0e0e0;
+}
+
+.time-slot.selected {
+  background-color: #a3d2ca;
+  color: #fff;
+}
+
+.time-slot.booked {
+  background-color: #e74c3c;
+  color: white;
+  cursor: not-allowed;
+}
+
+.booking-actions {
+  margin-top: 20px;
+  text-align: center;
+}
+.my-account-dropdown-options {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0px 8px 16px 0px rgba(1, 1, 1, 1.2);
+  list-style: none;
+  padding: 10px;
+  z-index: 1;
+}
+
+.my-account-dropdown-options li {
+  margin-bottom: 5px;
+}
+
+.my-account-dropdown-options a {
+  text-decoration: none;
+  color: #000;
+}
+
+.my-account-dropdown{
+
+  position: fixed;
+  top: 5px;
+  right: 0px;
+
+
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
