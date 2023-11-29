@@ -1,34 +1,41 @@
-import React, { useEffect, useState, Component } from 'react';
-import { Container, Button } from "semantic-ui-react";
+import React, { useState, useEffect } from 'react';
+import { Container, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import JobTable from "./JobTable";
+import JobTable from './JobTable';
 
-const getCurrentDate = () => {
-  // Get the current date
-  const currentDate = new Date();
+const JobContainer = ({searchTerm}) => {
+  const [jobs, setJobs] = React.useState([]);
+  const [page, setPage] = React.useState(0);
+  const [mode, setMode] = useState("best"); // Initialize mode state
+  const [time, setTime] = useState("week");
 
-  // Extract individual date components
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth() + 1; // Months are zero-indexed
-  const day = currentDate.getDate();
+  useEffect(() => {
+    fetchData();
+  }, [searchTerm]);
 
-  // Format the date as a string
-  const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+  const fetchData = async () => {
+    try { 
+       const url = searchTerm
+         ? `http://localhost:4000/jobPostings/${searchTerm}`
+         : 'http://localhost:4000/jobPostings';
+        
+         console.log("url: "+url);
 
-  return formattedDate;
-};
+      const response = await fetch(url);
+    
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
 
-export default class JobContainer extends Component {
-
-  constructor(props) {
-    super()
-    this.state = {
-      jobs: [],
-      page:0
-    };
-  }
-
-  header = [
+      const result = await response.json();
+      
+      setJobs(result);
+      console.log('Jobs ', result);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  const header = [
     "Title",
     "Company",
     "Location",
@@ -38,153 +45,87 @@ export default class JobContainer extends Component {
     "Posted Date"
   ];
 
-  componentDidMount() {
-    // this.handlePageClick = this.handlePageClick.bind(this);
-    // this.handleSetLabel = this.handleSetLabel.bind(this);
-    // this.fetchData = this.fetchData.bind(this);
+  const handlePageClick = (page) => {
+    setPage(page);
+  };
 
-   this.fetchData();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (
-      prevProps.mode !== this.props.mode ||
-      prevProps.label !== this.props.label ||
-      prevProps.time !== this.props.time
-    ) {
-      this.fetchData();
-    }
-  }
-
-  // fetchData() {
-  //   axios
-  //     .get("/preds", {
-  //       params: {
-  //         start: 0,
-  //         mode: this.props.mode,
-  //         label: this.props.label,
-  //         time: this.props.time,
-  //       },
-  //       timeout: 2000,
-  //     })
-  //     .then((res) => {
-  //       // const { result } = res.data;
-  //       // this.setState({ jobs: result });
-  //     });
-  // }
-
-  handlePageClick(page) {
-    this.setState({ page });
-  }
-
-  handleSetLabel(job, label) {
-    const newJobs = this.state.jobs.map((j) => {
-      if (j.jobId == job.jobId) {
+  const handleSetLabel = (job, label) => {
+    const newJobs = jobs.map((j) => {
+      if (j.jobId === job.jobId) {
         j.label = label;
       }
       return j;
     });
-    this.setState({ jobs: newJobs });
-    console.log(this.state.jobs)
-    // axios.put(`/preds/${job.jobId}`, { label }).then((res) => {
-    //   console.log(res);
-    // });
-  }
+    setJobs(newJobs);
+    console.log(newJobs);
+  };
 
-  render() {
     return (
-      <Container padding='20px 0px'>
-        <Button.Group>
-          <Button
-            onClick={() => this.setState({ mode: "best" })}
-            active={this.state.mode == "best"}
-          >
-            Best
-          </Button>
-          <Button
-            onClick={() => this.setState({ mode: "doubt" })}
-            active={this.state.mode == "doubt"}
-          >
-            Doubt
-          </Button>
-          <Button
-            onClick={() => this.setState({ mode: "worst" })}
-            active={this.state.mode == "worst"}
-          >
-            Worst
-          </Button>
-        </Button.Group>
-        {/* <Button.Group style={{ marginLeft: "20px" }}>
-          <Button
-            onClick={() => this.setState({ label: "unlabeled" })}
-            active={this.state.label == "unlabeled"}
-          >
-            Only Unlabeled
-          </Button>
-          <Button
-            onClick={() => this.setState({ label: "all" })}
-            active={this.state.label == "all"}
-          >
-            All
-          </Button>
-        </Button.Group> */}
+      <Container padding='20px 10px'>
+        {/* <Button.Group>
+        <Button
+          onClick={() => setMode("best")}
+          active={mode === "best"}
+        >
+          Best
+        </Button>
+        <Button
+          onClick={() => setMode("doubt")}
+          active={mode === "doubt"}
+        >
+          Doubt
+        </Button>
+        <Button
+          onClick={() => setMode("worst")}
+          active={mode === "worst"}
+        >
+          Worst
+        </Button>
+      </Button.Group> */}
 
-        <Button.Group style={{ marginLeft: "20px" }}>
-          <Button
-            onClick={() => this.setState({ time: "week" })}
-            active={this.state.time == "week"}
-          >
-            Last Week
-          </Button>
-          <Button
-            onClick={() => this.setState({ time: "month" })}
-            active={this.state.time == "month"}
-          >
-            Last Month
-          </Button>
-          <Button
-            onClick={() => this.setState({ time: "all" })}
-            active={this.state.time == "all"}
-          >
-            All
-          </Button>
-          
-        </Button.Group>
+      <Button.Group style={{ marginLeft: "10px" }}>
+        <Button
+          onClick={() => setTime("week")}
+          active={time === "week"}
+        >
+          Last Week
+        </Button>
+        <Button
+          onClick={() => setTime("month")}
+          active={time === "month"}
+        >
+          Last Month
+        </Button>
+        <Button
+          onClick={() => setTime("all")}
+          active={time === "all"}
+        >
+          All
+        </Button>
+      </Button.Group>
 
-        <Link to="/jobPostingForm"><Button style={{ marginLeft: "485px", backgroundColor: "black", color: "white" }}
-            onClick={() => this.setState({ time: "week" })}
-            active={this.state.time == "week"}
-          >Add a Job</Button>
-        </Link>
+      <Link to="/jobPostingForm">
+        <Button
+          style={{ marginLeft: "700px", backgroundColor: "black", color: "white" }}
+          onClick={() => setTime("week")}
+          active={time === "week"}
+        >
+          Add a Job
+        </Button>
+      </Link>
 
-        <JobTable
-        header={this.header}
-        rows={this.state.jobs}
-        onPageClick={this.handlePageClick}
-        onSetLabel={this.handleSetLabel}
-        numPages={parseInt(this.state.jobs.length / 15)}
-        page={this.state.page}
+      <JobTable
+        header={header}
+        rows={jobs}
+        onPageClick={handlePageClick}
+        onSetLabel={handleSetLabel}
+        numPages={parseInt(jobs.length / 15)}
+        page={page}
       />
       </Container>
       
     );
-  }
-
-  fetchData = async () => {
-    try {
-      const response = await fetch('http://localhost:4000/jobPostings');
-    
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const result = await response.json();
-      
-      this.setState({ jobs: result });
-      console.log("vuivek chutiya hain", this.state.jobs)
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
 
 }
+
+export default JobContainer;

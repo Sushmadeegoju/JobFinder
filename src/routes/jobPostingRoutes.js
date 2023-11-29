@@ -4,6 +4,6 @@ const jobPostingController = require('../controllers/jobPostingController');
 
 router.get('/jobPostings', jobPostingController.getAllJobPostings);
 router.post('/addJobPosting', jobPostingController.postJobPosting);
-router.get('/findJobPosting/:title', jobPostingController.getJobPosting);
+router.get('/jobPostings/:title', jobPostingController.getJobPosting);
 
 module.exports = router;

@@ -23,7 +23,7 @@ class JobTable extends Component {
                 </Button>
               </Table.Cell> */}
               <Table.Cell>
-                <a href={`https://www.linkedin.com/jobs/view/${index}`}/>
+                <a href={job.Link}/>
                   {job.title}
               
               </Table.Cell>

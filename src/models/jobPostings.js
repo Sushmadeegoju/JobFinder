@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const jobPostingSchema = mongoose.Schema({
+    Link: {
+        type: String,
+        required: true
+    },
     title: {
         type: String,
         required: true

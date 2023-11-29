@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import "fomantic-ui-css/semantic.css";
@@ -11,6 +11,11 @@ import JobPosting from './JobPosting';
 import '../styles/App.css';
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchTermChange = (newSearchTerm) => {
+    setSearchTerm(newSearchTerm);
+  };
   return (
     <Router>
       <header>
@@ -59,11 +64,12 @@ function App() {
         />
         <Route path="/jobs" element={
             <>
-              <HeaderSegmentLayout />
-              <JobContainer />
+              <HeaderSegmentLayout onSearchTermChange={handleSearchTermChange}/>
+              <JobContainer searchTerm={searchTerm}/>
             </>
           } 
         />
+
         <Route path="/register" element={
               <Register />
           } 
@@ -72,6 +78,7 @@ function App() {
               <JobPosting />
           } 
         />
+
         {/* Add more routes for other pages if needed */}
       </Routes>
 
