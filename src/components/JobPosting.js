@@ -26,7 +26,6 @@ function App() {
     return formattedDate;
   }
   
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewJob({ ...newJob, [name]: value });

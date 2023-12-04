@@ -48,7 +48,7 @@ nav a {
 }  */
 
 .option button {
-  background-color: #016b63;
+  background-color: #f6f7f7;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -84,12 +84,6 @@ Footer {
   color: white; /* Text color for the header */
 }
 
-.side-image {
-  /* background-image: url("/public/homeimg.jpeg"); */
-  /* background-image: url("public/background.png"); */
-  /* height: 300px;
-  width: 500px;  */
-}
 .align-home{
   display: flex;
   flex-direction: row;

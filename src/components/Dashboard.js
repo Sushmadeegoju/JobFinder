@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Dashboard.css';
+import '../styles/Dashboard.css';
 
 const availableTimeSlots = [
     { id: 1, time: '10:00 AM - 11:00 AM', mentor: 'Ritwik Sood', booked: false },

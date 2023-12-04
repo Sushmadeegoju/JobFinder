@@ -18,7 +18,7 @@ const HeaderSegmentLayout = ({ onSearchTermChange }) => {
 
   const handleViewJobs = () => {
     setSearchTerm('');
-    onSearchTermChange('');
+    onSearchTermChange(searchTerm);
   }
 
   return (

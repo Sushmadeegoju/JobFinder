@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Header, Segment, Button } from 'semantic-ui-react';
 import '../styles/login.css';
 
-function Login() {
+function Login({ onLogin }) {
 
     const navigate = useNavigate(); // Get the history object from React Router
 
@@ -12,6 +12,7 @@ function Login() {
         if(user.criteria == 'student') {
             console.log("entered successful login");
             navigate('/jobs'); 
+            onLogin(user);
         }
         else if(user.criteria == 'mentor') {
             navigate('/mentors'); 
