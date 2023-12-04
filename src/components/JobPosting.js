@@ -6,7 +6,7 @@ function App() {
   // const [jobs, setJobs] = useState([]);
   const navigate = useNavigate();
   const [newJob, setNewJob] = useState({
-    Link: '',
+    link: '',
     title: '',
     company: '',
     location: '',
