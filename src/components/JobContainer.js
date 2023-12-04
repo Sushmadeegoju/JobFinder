@@ -3,50 +3,73 @@ import { Container, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import JobTable from './JobTable';
 
-const JobContainer = ({searchTerm}) => {
-  const [jobs, setJobs] = React.useState([]);
-  const [page, setPage] = React.useState(0);
-  const [mode, setMode] = useState("best"); // Initialize mode state
-  const [time, setTime] = useState("week");
+const JobContainer = ({ searchTerm }) => {
+  const [jobs, setJobs] = useState([]);
+  const [page, setPage] = useState(0);
+
+  const handleLikesUpdated = async () => {
+    // Fetch updated job data or whatever logic you need
+    await this.fetchJobData();
+
+    // Trigger a re-render by setting the state or using any other mechanism
+    this.setState({});
+
+    // You can also force a reload of the entire page if needed
+    // window.location.reload();
+  };
 
   useEffect(() => {
-    fetchData();
+    fetchData('http://localhost:4000/jobPostings/');
   }, [searchTerm]);
 
-  const fetchData = async () => {
-    try { 
-       const url = searchTerm
-         ? `http://localhost:4000/jobPostings/${searchTerm}`
-         : 'http://localhost:4000/jobPostings';
-        
-         console.log("url: "+url);
+  const fetchData = async (url) => {
+    try {
+      if (searchTerm) {
+        url = `http://localhost:4000/jobPostings/${searchTerm}`;
+      }
 
       const response = await fetch(url);
-    
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
 
       const result = await response.json();
-      
+
       setJobs(result);
       console.log('Jobs ', result);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
+
   const header = [
-    "Title",
-    "Company",
-    "Location",
-    "Seniority",
-    "Description",
-    "Action",
-    "Posted Date"
+    'Title',
+    'Company',
+    'Location',
+    'Seniority',
+    'Description',
+    'Action',
+    'Posted Date',
   ];
 
   const handlePageClick = (page) => {
     setPage(page);
+  };
+
+  const handleWeek = async () => {
+    const url = 'http://localhost:4000/jobsLastWeek';
+    await fetchData(url);
+  };
+
+  const handleMonth = async () => {
+    const url = 'http://localhost:4000/jobsLastMonth';
+    await fetchData(url);
+  };
+
+  const handleAll = async () => {
+    const url = 'http://localhost:4000/jobPostings';
+    await fetchData(url);
   };
 
   const handleSetLabel = (job, label) => {
@@ -57,58 +80,24 @@ const JobContainer = ({searchTerm}) => {
       return j;
     });
     setJobs(newJobs);
-    console.log(newJobs);
+    // console.log(newJobs);
   };
 
-    return (
-      <Container padding='20px 10px'>
-        {/* <Button.Group>
-        <Button
-          onClick={() => setMode("best")}
-          active={mode === "best"}
-        >
-          Best
-        </Button>
-        <Button
-          onClick={() => setMode("doubt")}
-          active={mode === "doubt"}
-        >
-          Doubt
-        </Button>
-        <Button
-          onClick={() => setMode("worst")}
-          active={mode === "worst"}
-        >
-          Worst
-        </Button>
-      </Button.Group> */}
-
-      <Button.Group style={{ marginLeft: "10px" }}>
-        <Button
-          onClick={() => setTime("week")}
-          active={time === "week"}
-        >
-          Last Week
-        </Button>
-        <Button
-          onClick={() => setTime("month")}
-          active={time === "month"}
-        >
-          Last Month
-        </Button>
-        <Button
-          onClick={() => setTime("all")}
-          active={time === "all"}
-        >
-          All
-        </Button>
+  return (
+    <Container padding="20px 10px" style={{ overflow: 'auto' }}>
+      <Button.Group style={{ marginLeft: '10px' }}>
+        <Button onClick={handleWeek}>Last Week</Button>
+        <Button onClick={handleMonth}>Last Month</Button>
+        <Button onClick={handleAll}>All</Button>
       </Button.Group>
 
       <Link to="/jobPostingForm">
         <Button
-          style={{ marginLeft: "700px", backgroundColor: "black", color: "white" }}
-          onClick={() => setTime("week")}
-          active={time === "week"}
+          style={{
+            marginLeft: '700px',
+            backgroundColor: 'black',
+            color: 'white',
+          }}
         >
           Add a Job
         </Button>
@@ -121,11 +110,10 @@ const JobContainer = ({searchTerm}) => {
         onSetLabel={handleSetLabel}
         numPages={parseInt(jobs.length / 15)}
         page={page}
+        onLikesUpdated={handleLikesUpdated}
       />
-      </Container>
-      
-    );
-
-}
+    </Container>
+  );
+};
 
 export default JobContainer;

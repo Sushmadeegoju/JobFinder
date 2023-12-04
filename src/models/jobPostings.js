@@ -31,6 +31,9 @@ const jobPostingSchema = mongoose.Schema({
     postedDate: {
         type: Date,
         required: true
+    },
+    likes: {
+        type: Number
     }
 });
 
