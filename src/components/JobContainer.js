@@ -3,19 +3,24 @@ import { Container, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import JobTable from './JobTable';
 
-const JobContainer = ({ searchTerm }) => {
+const JobContainer = ({ searchTerm, id }) => {
   const [jobs, setJobs] = useState([]);
   const [page, setPage] = useState(0);
 
   const handleLikesUpdated = async () => {
-    // Fetch updated job data or whatever logic you need
-    await this.fetchJobData();
+    try {
+      // Fetch updated job data or whatever logic you need
+      await fetchData('http://localhost:4000/jobPostings/');
 
-    // Trigger a re-render by setting the state or using any other mechanism
-    this.setState({});
+      // Trigger a re-render by setting the state or using any other mechanism
+      
+      // Refresh the page
+      console.log("Page will reload");
+      window.location.reload();
+  } catch (error) {
+      console.error("Error in handleLikesUpdated:", error);
+  }
 
-    // You can also force a reload of the entire page if needed
-    // window.location.reload();
   };
 
   useEffect(() => {
@@ -49,8 +54,9 @@ const JobContainer = ({ searchTerm }) => {
     'Location',
     'Seniority',
     'Description',
-    'Action',
     'Posted Date',
+    'Like',
+    'Delete'
   ];
 
   const handlePageClick = (page) => {
@@ -84,7 +90,7 @@ const JobContainer = ({ searchTerm }) => {
   };
 
   return (
-    <Container padding="20px 10px" style={{ overflow: 'auto' }}>
+    <Container padding="20px 10px" style={{ overflow: 'auto', marginBottom: '20px'}}>
       <Button.Group style={{ marginLeft: '10px' }}>
         <Button onClick={handleWeek}>Last Week</Button>
         <Button onClick={handleMonth}>Last Month</Button>
@@ -111,6 +117,7 @@ const JobContainer = ({ searchTerm }) => {
         numPages={parseInt(jobs.length / 15)}
         page={page}
         onLikesUpdated={handleLikesUpdated}
+        userId={id}
       />
     </Container>
   );

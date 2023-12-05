@@ -34,6 +34,11 @@ const jobPostingSchema = mongoose.Schema({
     },
     likes: {
         type: Number
+    },
+    studentId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'student', // Reference to the jobSeekerModel
+        required: true,
     }
 });
 

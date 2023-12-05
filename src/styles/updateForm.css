@@ -1,0 +1,36 @@
+/* Add this to your existing CSS or create a new CSS file */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ccc;
+    z-index: 999;
+  }
+  
+  .modal label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .modal input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
+  
+  .modal button {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .modal button:hover {
+    background-color: #45a049;
+  }
+  

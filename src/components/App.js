@@ -48,15 +48,19 @@ function App() {
       }
   };
 
-  const [options, setOptions] = useState(() => { return ['My Dashboard', 'View Companies', 'Logout'] });
+  const [options, setOptions] = useState(() => { return ['My Dashboard', 'View Jobs','View Mentors', 'Logout'] });
    
   const storedLoggedInState = localStorage.getItem('isLoggedIn');
   const [isLoggedIn, setIsLoggedIn] = useState(storedLoggedInState === 'true');
+  const storedUserId= localStorage.getItem('userId');
+  const [userId, setUserId] = useState(storedUserId || '');
 
   const handleLogin = (user) => {
     setIsLoggedIn(true);
     localStorage.setItem('isLoggedIn', 'true');
-    setOptions(['My Dashboard', 'View Companies', 'Logout']);
+    setOptions(['My Dashboard', 'View Jobs','View Mentors', 'Logout']);
+    setUserId(user._id);
+    localStorage.setItem('userId', user._id);
   };
 
   const handleLogout = () => {
@@ -148,14 +152,14 @@ function App() {
         <Route path="/mentors" element={
             <>
               <HeaderSegmentLayout />
-              <Mentor />
+              <Mentor id={userId}/>
             </>
           } 
         />
         <Route path="/jobs" element={
             <>
               <HeaderSegmentLayout onSearchTermChange={handleSearchTermChange}/>
-              <JobContainer searchTerm={searchTerm}/>
+              <JobContainer searchTerm={searchTerm} id={userId}/>
             </>
           } 
         />
@@ -165,10 +169,10 @@ function App() {
           } 
         />
         <Route path="/jobPostingForm" element={
-              <JobPosting />
+              <JobPosting id={userId}/>
           } 
         />
-        <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/dashboard" element={<Dashboard id={userId}/>}/>
         {/* Add more routes for other pages if needed */}
       </Routes>
 

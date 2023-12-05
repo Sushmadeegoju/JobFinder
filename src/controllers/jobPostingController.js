@@ -114,5 +114,39 @@ const handleLikes = async (req, res) => {
     }
 };
 
+const deleteJobPosting = async (req, res) => {
+    const jobId = req.params.id;
+    const studentId = req.params.user_id; // Assuming you have the user information in the request (e.g., from authentication middleware)
 
-module.exports = { getAllJobPostings, postJobPosting, getJobPosting, getJobsLastWeek, getJobsLastMonth, handleLikes }
+    try {
+        // Use findOne to get a single document by ID
+        const job = await jobPostingModel.findOne({ _id: jobId });
+
+        // Check if the job exists
+        if (!job) {
+            return res.status(404).json({ error: 'Job not found' });
+        }
+
+        // Check if the user is the one who posted the job
+        if (job.studentId.toString() !== studentId) {
+            console.log(job.studentId, studentId);
+            return res.status(403).json({ error: 'Unauthorized: You are not allowed to delete this job posting' });
+        }
+
+        // Delete the job posting
+        await job.deleteOne();
+
+        // Respond with a success message
+        res.status(200).json({ message: 'Job posting deleted successfully' });
+    } catch (error) {
+        // Handle errors
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+
+
+
+
+module.exports = { getAllJobPostings, postJobPosting, getJobPosting, getJobsLastWeek, getJobsLastMonth, handleLikes, deleteJobPosting }

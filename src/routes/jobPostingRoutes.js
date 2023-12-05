@@ -8,5 +8,6 @@ router.get('/jobPostings/:title', jobPostingController.getJobPosting);
 router.get('/jobsLastWeek', jobPostingController.getJobsLastWeek);
 router.get('/jobsLastMonth', jobPostingController.getJobsLastMonth);
 router.post('/addLikes/:id', jobPostingController.handleLikes);
+router.delete('/deleteJobPosting/:id/:user_id', jobPostingController.deleteJobPosting);
 
 module.exports = router;
