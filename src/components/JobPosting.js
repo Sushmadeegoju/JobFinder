@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import '../styles/JobPosting.css';
 import { useNavigate } from 'react-router-dom';
 
-function App() {
-  // const [jobs, setJobs] = useState([]);
+function App({id}) {
   const navigate = useNavigate();
   const [newJob, setNewJob] = useState({
-    link: '',
+    Link: '',
     title: '',
     company: '',
     location: '',
@@ -33,7 +32,7 @@ function App() {
 
   const handleAddJob = async () => {
     try {
-      const dataToSend = { ...newJob, postedDate: getFormattedDate() }
+      const dataToSend = { ...newJob, postedDate: getFormattedDate(), studentId: id }
       const response = await fetch("/addJobPosting", {
         method: "POST",
         headers: {

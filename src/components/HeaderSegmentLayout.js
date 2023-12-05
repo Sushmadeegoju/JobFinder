@@ -16,16 +16,19 @@ const HeaderSegmentLayout = ({ onSearchTermChange }) => {
     
   };
 
-  const handleViewJobs = () => {
-    setSearchTerm('');
-    onSearchTermChange(searchTerm);
-  }
+  // Assuming searchTerm and onSearchTermChange are defined in your component's state or props
+
+  // const handleViewJobs = () => {
+  //   setSearchTerm('');
+  //   onSearchTermChange(''); // Assuming onSearchTermChange accepts a parameter
+  // }
+
 
   return (
     <div style={{ padding: '15px 150px' }}>
       <Segment inverted style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Link to="/jobs">
-          <Button onClick={handleViewJobs}>
+          <Button>
             View Jobs
           </Button>
         </Link>

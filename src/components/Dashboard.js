@@ -1,82 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/Dashboard.css';
 
-const availableTimeSlots = [
-    { id: 1, time: '10:00 AM - 11:00 AM', mentor: 'Ritwik Sood', booked: false },
-    { id: 2, time: '1:00 PM - 2:00 PM', mentor: 'Shail Shah', booked: false },
-    { id: 3, time: '1:00 PM - 2:00 PM', mentor: 'Vivek Joshi', booked: false },
-    { id: 4, time: '1:00 PM - 2:00 PM', mentor: 'Sushma Degoju', booked: false },
-    // Add more time slots as needed
-];
 
-const Dashboard = () => {
-    const [selectedSlot, setSelectedSlot] = useState(null);
-    const [showMyAccountDropdown, setShowMyAccountDropdown] = useState(false);
+const Meeting = ({ firstName, lastName, company, timeSlot, meetingLink, email, onCancel }) => (
+  <div className="meeting">
+    <div className="meeting-info">
+      <div className="meeting-title">{`Meeting with ${firstName} ${lastName}`} / <a href="#">{company} </a></div>
+      <div className="meeting-details">
+        {timeSlot} / <a href={`mailto:${email}`}>{email}</a> <br></br><br></br>
+        {/* Join <a href={link} className="meeting-link" target="_blank" rel="noopener noreferrer">Zoom Meeting</a> &nbsp;&nbsp;
+        Passcode: {passcode} */}
+        {`Location: ${meetingLink}`}<br />
+        <button className="cancel-button" onClick={onCancel}>Cancel Meeting</button>
+      </div>
+    </div>
+  </div>
+);
 
-    const handleSlotClick = (slot) => {
-        setSelectedSlot(slot);
-    };
+const MeetingsList = ({id}) => {
+  const [meetings, setMeetings] = useState([]);
 
-    const handleBookMeeting = () => {
-        if (selectedSlot) {
-            alert(`Meeting booked with ${selectedSlot.mentor} at ${selectedSlot.time}`);
-            // Update the state or send a request to update the backend
-            // to mark the slot as booked.
-        } else {
-            alert('Please select a meeting slot before booking.');
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`http://localhost:4000/studentMeetings/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json"
         }
-    };
+      });
 
-    const handleMyAccountDropdownToggle = () => {
-        setShowMyAccountDropdown(!showMyAccountDropdown);
-    };
+      if(response.ok) {
+        setMeetings(await response.json());
+      } else {
+        console.log("Meetings not found!!");
+      }
+   } catch(e) {
+      console.log("Error: " + e);
+   }
+  }
 
-    return (
-        <>
-            <div className="navigation-bar">
+  useEffect(() => {
+    fetchData();
+  },[]);
+  
 
-                <div className="navigation-bar-right">
-                    <div className="my-account-dropdown">
-                        <button onClick={handleMyAccountDropdownToggle}>My Account</button>
-                        {showMyAccountDropdown && (
-                            <ul className="my-account-dropdown-options">
-                                <li>
-                                    <a href="#">Logout</a>
-                                </li>
-                                <li>
-                                    <a href="/dashboard">Dashboard</a>
-                                </li>
-                            </ul>
-                        )}
-                    </div>
-                </div>
-            </div>
-            <div className="dashboard">
-                <h1>Student Dashboard</h1>
-                <div className="time-slots">
-                    {availableTimeSlots.map((slot) => (
-                        <div
-                            key={slot.id}
-                            className={`time-slot ${slot.booked ? 'booked' : ''} ${
-                                selectedSlot === slot ? 'selected' : ''
-                            }`}
-                            onClick={() => handleSlotClick(slot)}
-                        >
-                            <p>{slot.time}</p>
-                            <p>Mentor: {slot.mentor}</p>
-                            {slot.booked ? <p>Booked</p> : <p>Available</p>}
-                        </div>
-                    ))}
-                </div>
-                <div className="booking-actions">
-                    <button onClick={handleBookMeeting} disabled={!selectedSlot}>
-                        Book Meeting
-                    </button>
-                </div>
-            </div>
-        </>
-    );
+  const cancelMeeting = async (meetingId) => {
+    // const newMeetings = meetings.filter((_, i) => i !== index);
+    try {
+      const response = await fetch(`http://localhost:4000/deletestudentMeeting/${meetingId}`, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json"
+        }
+      });
+
+      if(response.ok) {
+        console.log("Deleted meeting: ", response.json());
+        fetchData();
+      } else {
+        console.log("Meetings not found!!");
+      }
+   } catch(e) {
+      console.log("Error: " + e);
+   }
+  };
+
+  return (
+    <div className="meetings">
+      <h1>My Meetings</h1>
+      <p>View and Edit your personal meetings. <a href="#">Learn More</a></p>
+      <div className="meetings-list">
+        {meetings.map((meeting, index) => (
+          <Meeting key={index} {...meeting} onCancel={() => cancelMeeting(meeting._id)} />
+        ))}
+      </div>
+    </div>
+  );
 };
 
-export default Dashboard;
-
+export default MeetingsList;

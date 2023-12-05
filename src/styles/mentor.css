@@ -19,3 +19,17 @@
     background-color: #f2f2f2;
   }
   
+  .popup {
+    color: #016b63;
+    font-size: 24px;  /* Increased font size */
+    position: fixed;  /* Use fixed positioning to place popup relative to the viewport */
+    top: 0;  /* Place it at the very top of the viewport */
+    left: 50%;  /* Center it horizontally relative to the viewport */
+    transform: translateX(-50%);  /* Adjust for true centering */
+    padding: 20px 40px;  /* Increased padding */
+    z-index: 1000;  /* Ensure popup is on top of other elements */
+    background-color: rgba(255, 255, 255, 0.8);  /* White background with 70% opacity */
+    border-radius: 5px;  /* Rounded corners */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);  /* Subtle shadow for some depth */
+    white-space: nowrap;  /* Prevent text wrapping */
+}

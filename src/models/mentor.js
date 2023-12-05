@@ -38,6 +38,10 @@ const mentorSchema = mongoose.Schema({
     company: {
         type: String,
         required: true
+    }, 
+    meetingTime: {
+        type: String,
+        required: true
     }
 })
 
